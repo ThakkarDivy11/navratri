@@ -1,0 +1,11 @@
+{
+  "name": "navratri-b2b-passes",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npx vite --port 3005 --host",
+    "start": "npx vite --port 3005 --host",
+    "serve": "npx vite --port 3005 --host"
+  }
+}
