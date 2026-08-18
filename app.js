@@ -112,16 +112,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initHeroSlideshow();
   initMobileMenu();
+
+  // Real-time synchronization when events are updated/deleted in Admin Panel
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'navratri_custom_events') {
+      renderEvents();
+    }
+  });
 });
 
 // Get merged list of default venues and admin-added custom venues
 function getCombinedVenues() {
   try {
     const data = localStorage.getItem('navratri_custom_events');
-    if (data) {
-      const parsed = JSON.parse(data);
-      return parsed.length > 0 ? parsed : VENUES_DATA;
+    if (data !== null) {
+      return JSON.parse(data);
     }
+    // First time visit: initialize localStorage with default VENUES_DATA
+    localStorage.setItem('navratri_custom_events', JSON.stringify(VENUES_DATA));
     return VENUES_DATA;
   } catch (e) {
     return VENUES_DATA;
@@ -140,6 +148,17 @@ function renderEvents() {
     if (currentFilter === 'vip') return (venue.passTypes || '').includes('VIP');
     return true;
   });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);">
+        <i class="fa-solid fa-calendar-xmark" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 12px;"></i>
+        <h3 style="font-size: 1.2rem; margin-bottom: 6px;">No events currently available</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Check back soon or contact us directly on WhatsApp for custom bulk requirements.</p>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = filtered.map(venue => `
     <div class="event-card">
