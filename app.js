@@ -113,22 +113,37 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroSlideshow();
   initMobileMenu();
 
-  // Real-time synchronization when events are updated/deleted in Admin Panel
+  // 1. Real-time tab sync
   window.addEventListener('storage', (e) => {
     if (e.key === 'navratri_custom_events') {
       renderEvents();
     }
   });
+
+  // 2. Universal Auto-Poll Server every 5 seconds for live global updates across all devices
+  setInterval(() => {
+    renderEvents();
+  }, 5000);
 });
 
-// Get merged list of default venues and admin-added custom venues
-function getCombinedVenues() {
+// Fetch events from Global Server API with fallback to localStorage
+async function getCombinedVenues() {
+  try {
+    const res = await fetch('/api/events');
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('navratri_custom_events', JSON.stringify(data));
+      return data;
+    }
+  } catch (e) {
+    // Silently handle offline / no-server state
+  }
+
   try {
     const data = localStorage.getItem('navratri_custom_events');
     if (data !== null) {
       return JSON.parse(data);
     }
-    // First time visit: initialize localStorage with default VENUES_DATA
     localStorage.setItem('navratri_custom_events', JSON.stringify(VENUES_DATA));
     return VENUES_DATA;
   } catch (e) {
@@ -137,11 +152,11 @@ function getCombinedVenues() {
 }
 
 // Render Event Catalogue Cards
-function renderEvents() {
+async function renderEvents() {
   const container = document.getElementById('eventsContainer');
   if (!container) return;
 
-  const allVenues = getCombinedVenues();
+  const allVenues = await getCombinedVenues();
   const filtered = allVenues.filter(venue => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'ahmedabad') return (venue.city || 'Ahmedabad').toLowerCase() === 'ahmedabad';

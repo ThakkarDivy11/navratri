@@ -155,19 +155,27 @@ function showDashboard() {
   renderEventsTable();
 }
 
-// ── LocalStorage Helpers ──
-function getStoredEvents() {
+// ── LocalStorage & Server API Helpers ──
+async function getStoredEvents() {
   try {
-    const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (data) {
-      return JSON.parse(data);
-    } else {
-      // First time initialization with default venues
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_VENUES));
-      return DEFAULT_VENUES;
+    const res = await fetch('/api/events');
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      return data;
     }
   } catch (e) {
-    console.error('Error loading events', e);
+    console.warn('API connection unavailable, fallback to local cache', e);
+  }
+
+  try {
+    const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (data !== null) {
+      return JSON.parse(data);
+    }
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_VENUES));
+    return DEFAULT_VENUES;
+  } catch (e) {
     return DEFAULT_VENUES;
   }
 }
@@ -181,14 +189,14 @@ function saveStoredEvents(events) {
   }
 }
 
-function getAllEvents() {
-  return getStoredEvents();
+async function getAllEvents() {
+  return await getStoredEvents();
 }
 
 // ── Render Table & Stats ──
-function renderEventsTable() {
+async function renderEventsTable() {
   const tbody = document.getElementById('eventsTableBody');
-  const allEvents = getStoredEvents();
+  const allEvents = await getStoredEvents();
   const customCount = allEvents.filter(e => !e.isDefault).length;
   const defaultCount = allEvents.filter(e => e.isDefault).length;
 
@@ -200,7 +208,7 @@ function renderEventsTable() {
   if (allEvents.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6">
+        <td colspan="7">
           <div class="empty-state">
             <i class="fa-solid fa-calendar-xmark"></i>
             <p>No events found. Click "+ Add Event" to create one.</p>
@@ -306,78 +314,75 @@ function handleImageUpload(e) {
   reader.readAsDataURL(file);
 }
 
-// ── Save Event (Create / Update) ──
-function saveEvent(e) {
+// ── Save Event (Create / Update via Global Server API) ──
+async function saveEvent(e) {
   e.preventDefault();
 
   const editId = document.getElementById('editEventId').value;
-  const name = document.getElementById('eventName').value.trim();
-  const location = document.getElementById('eventLocation').value.trim();
-  const city = document.getElementById('eventCity').value.trim() || 'Ahmedabad';
-  const dates = document.getElementById('eventDates').value.trim();
-  const artist = document.getElementById('eventArtist').value.trim();
-  const type = document.getElementById('eventType').value;
-  const passTypes = document.getElementById('eventPassTypes').value.trim();
-  const formats = document.getElementById('eventFormats').value;
-  const badge = document.getElementById('eventBadge').value.trim();
-  const availability = document.getElementById('eventAvailability').value;
-  const b2bPrice = document.getElementById('eventPrice').value.trim() || 'Get B2B Rate';
-  const imageData = document.getElementById('eventImageData').value;
+  const eventPayload = {
+    name: document.getElementById('eventName').value.trim(),
+    location: document.getElementById('eventLocation').value.trim(),
+    city: document.getElementById('eventCity').value.trim() || 'Ahmedabad',
+    dates: document.getElementById('eventDates').value.trim(),
+    artist: document.getElementById('eventArtist').value.trim(),
+    type: document.getElementById('eventType').value,
+    passTypes: document.getElementById('eventPassTypes').value.trim(),
+    formats: document.getElementById('eventFormats').value,
+    badge: document.getElementById('eventBadge').value.trim(),
+    availability: document.getElementById('eventAvailability').value,
+    b2bPrice: document.getElementById('eventPrice').value.trim() || 'Get B2B Rate',
+    image: document.getElementById('eventImageData').value || 'assets/venue_karnavati.jpg'
+  };
 
-  const events = getStoredEvents();
-
-  if (editId) {
-    // Update existing
-    const idx = events.findIndex(ev => ev.id === editId);
-    if (idx !== -1) {
-      events[idx] = {
-        ...events[idx],
-        name,
-        location,
-        city,
-        dates,
-        artist,
-        type,
-        passTypes,
-        formats,
-        badge,
-        availability,
-        b2bPrice,
-        image: imageData || events[idx].image || 'assets/venue_karnavati.jpg'
-      };
-      saveStoredEvents(events);
-      showToast('Event updated successfully!', 'success');
+  try {
+    let res;
+    if (editId) {
+      res = await fetch(`/api/events/${editId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventPayload)
+      });
+    } else {
+      res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventPayload)
+      });
     }
-  } else {
-    // Create new
-    const newEvent = {
-      id: 'custom_' + Date.now(),
-      name,
-      location,
-      city,
-      dates,
-      artist,
-      type,
-      passTypes,
-      formats,
-      badge,
-      availability,
-      b2bPrice,
-      image: imageData || 'assets/ruda_garba.png',
-      isDefault: false
-    };
-    events.unshift(newEvent);
-    saveStoredEvents(events);
-    showToast('New Event added successfully!', 'success');
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data.events) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.events));
+      }
+      showToast(editId ? 'Event updated globally for all users!' : 'New event added globally for all users!', 'success');
+      cancelForm();
+      await renderEventsTable();
+      return;
+    }
+  } catch (err) {
+    console.error('API Error:', err);
   }
 
+  // Fallback
+  const events = await getStoredEvents();
+  if (editId) {
+    const idx = events.findIndex(ev => ev.id === editId);
+    if (idx !== -1) {
+      events[idx] = { ...events[idx], ...eventPayload };
+    }
+  } else {
+    events.unshift({ id: 'custom_' + Date.now(), ...eventPayload, isDefault: false });
+  }
+  saveStoredEvents(events);
+  showToast('Saved locally!', 'success');
   cancelForm();
-  renderEventsTable();
+  await renderEventsTable();
 }
 
 // ── Edit Event ──
-function editEvent(id) {
-  const events = getStoredEvents();
+async function editEvent(id) {
+  const events = await getStoredEvents();
   const event = events.find(ev => ev.id === id);
   if (!event) return;
 
@@ -420,16 +425,55 @@ function editEvent(id) {
   window.scrollTo({ top: panel.offsetTop - 100, behavior: 'smooth' });
 }
 
-// ── Delete Event ──
-function deleteEvent(id) {
-  if (!confirm('Are you sure you want to delete this event?')) return;
+// ── Delete Event globally for ALL users ──
+async function deleteEvent(id) {
+  if (!confirm('Super Admin Warning: Delete this event permanently for ALL users across all devices?')) return;
 
-  let events = getStoredEvents();
+  try {
+    const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.events) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.events));
+      }
+      showToast('Event deleted globally for all users!', 'success');
+      await renderEventsTable();
+      return;
+    }
+  } catch (err) {
+    console.error('Delete API Error:', err);
+  }
+
+  // Fallback
+  let events = await getStoredEvents();
   events = events.filter(ev => ev.id !== id);
   saveStoredEvents(events);
-
   showToast('Event deleted!', 'success');
-  renderEventsTable();
+  await renderEventsTable();
+}
+
+// ── Reset Defaults globally ──
+async function resetDefaultEvents() {
+  if (!confirm('Are you sure you want to reset all events to system defaults for ALL users?')) return;
+
+  try {
+    const res = await fetch('/api/events/reset', { method: 'POST' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.events) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.events));
+      }
+      showToast('Reset to default events globally!', 'success');
+      await renderEventsTable();
+      return;
+    }
+  } catch (err) {
+    console.error('Reset API Error:', err);
+  }
+
+  saveStoredEvents(DEFAULT_VENUES);
+  showToast('Reset to default events!', 'success');
+  await renderEventsTable();
 }
 
 // ── Export / Import JSON ──

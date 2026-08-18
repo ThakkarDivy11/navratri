@@ -1,0 +1,34 @@
+[
+  {
+    "id": "suvarn",
+    "name": "Rudaah",
+    "location": "S.G. Highway, Gota",
+    "city": "Ahmedabad",
+    "dates": "Oct 11 – Oct 19, 2026",
+    "artist": "Mandli",
+    "type": "ahmedabad",
+    "passTypes": "General / Premium / Season / Couple",
+    "formats": "Physical & Online Available",
+    "image": "assets/ruda_garba.png",
+    "b2bPrice": "Get B2B Rate",
+    "badge": "Grand Arena",
+    "availability": "High Inventory",
+    "isDefault": true
+  },
+  {
+    "id": "redraas",
+    "name": "Raataldi",
+    "location": "S.G. Highway, Gota",
+    "city": "Ahmedabad",
+    "dates": "Oct 11 – Oct 19, 2026",
+    "artist": "Mandli",
+    "type": "ahmedabad",
+    "passTypes": "VIP / Premium / Season / Couple",
+    "formats": "Physical & Online Available",
+    "image": "assets/raatledo.png",
+    "b2bPrice": "Get B2B Rate",
+    "badge": "Ultra VIP",
+    "availability": "Limited Seats",
+    "isDefault": true
+  }
+]

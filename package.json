@@ -4,8 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx vite --port 3005 --host",
-    "start": "npx vite --port 3005 --host",
-    "serve": "npx vite --port 3005 --host"
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
   }
 }
