@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModalEvents();
   initFaqAccordion();
   initHeroSlideshow();
+  initMobileMenu();
 });
 
 // Get merged list of default venues and admin-added custom venues
@@ -415,5 +416,63 @@ function initHeroSlideshow() {
         slideInterval = setInterval(nextSlide, 5000);
       }
     });
+  });
+}
+
+// Interactive Mobile Navigation Menu
+function initMobileMenu() {
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const navLinks = document.querySelector('.nav-links');
+  const navActions = document.querySelector('.nav-actions');
+
+  if (!menuBtn || !navLinks) return;
+
+  let backdrop = document.querySelector('.mobile-nav-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'mobile-nav-backdrop';
+    document.body.appendChild(backdrop);
+  }
+
+  function toggleMenu(open) {
+    const shouldOpen = open !== undefined ? open : !navLinks.classList.contains('active');
+    
+    if (shouldOpen) {
+      navLinks.classList.add('active');
+      if (navActions) navActions.classList.add('active');
+      backdrop.classList.add('active');
+      menuBtn.classList.add('open');
+      menuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      document.body.style.overflow = 'hidden';
+    } else {
+      navLinks.classList.remove('active');
+      if (navActions) navActions.classList.remove('active');
+      backdrop.classList.remove('active');
+      menuBtn.classList.remove('open');
+      menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      document.body.style.overflow = '';
+    }
+  }
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  backdrop.addEventListener('click', () => {
+    toggleMenu(false);
+  });
+
+  const links = navLinks.querySelectorAll('a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      toggleMenu(false);
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 992 && navLinks.classList.contains('active')) {
+      toggleMenu(false);
+    }
   });
 }
