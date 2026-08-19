@@ -12,21 +12,56 @@ export default function EventCatalogue({ onRequestPasses }) {
   useEffect(() => {
     let isMounted = true;
 
-    // Initial load from localStorage/defaults
+    const updateVenues = (data) => {
+      if (isMounted && data && Array.isArray(data) && data.length > 0) {
+        setVenues(data);
+      }
+    };
+
+    // 1. Initial load from localStorage/defaults
     const initial = getStoredEvents();
     if (initial && initial.length > 0) {
       setVenues(initial);
     }
 
-    // Fetch fresh events once from server in background
-    fetchGlobalEvents().then((data) => {
-      if (isMounted && data && Array.isArray(data) && data.length > 0) {
-        setVenues(data);
+    // 2. Fetch fresh events once from server on mount
+    fetchGlobalEvents(true).then(updateVenues);
+
+    // 3. Instant Real-Time Cross-Tab / Window Broadcast Listener
+    let channel = null;
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        channel = new BroadcastChannel('rangsetu_events_sync');
+        channel.onmessage = (event) => {
+          if (event.data && event.data.type === 'SYNC_EVENTS' && Array.isArray(event.data.events)) {
+            updateVenues(event.data.events);
+          }
+        };
+      } catch (e) {}
+    }
+
+    // 4. Smart Focus / Visibility Refresh (When user switches back to tab)
+    const handleFocus = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        fetchGlobalEvents(true).then(updateVenues);
       }
-    });
+    };
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleFocus);
+
+    // 5. Lightweight background sync every 15s only when tab is actively visible
+    const timer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        fetchGlobalEvents(true).then(updateVenues);
+      }
+    }, 15000);
 
     return () => {
       isMounted = false;
+      if (channel) channel.close();
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleFocus);
+      clearInterval(timer);
     };
   }, []);
 

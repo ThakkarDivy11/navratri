@@ -116,10 +116,28 @@ export function getStoredEvents() {
   }
 }
 
-export function saveStoredEvents(events) {
+export const EVENTS_CHANNEL = 'rangsetu_events_sync';
+
+export function broadcastEventsUpdate(events) {
+  if (typeof window === 'undefined') return;
+  try {
+    if ('BroadcastChannel' in window) {
+      const channel = new BroadcastChannel(EVENTS_CHANNEL);
+      channel.postMessage({ type: 'SYNC_EVENTS', events });
+      channel.close();
+    }
+  } catch (e) {}
+}
+
+export function saveStoredEvents(events, shouldBroadcast = true) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
+    memoryCache = events;
+    lastFetchTime = Date.now();
+    if (shouldBroadcast) {
+      broadcastEventsUpdate(events);
+    }
   } catch (e) {
     console.error('Error saving events', e);
   }
@@ -128,7 +146,7 @@ export function saveStoredEvents(events) {
 let inFlightPromise = null;
 let memoryCache = null;
 let lastFetchTime = 0;
-const CACHE_TTL_MS = 60 * 1000; // 60s in-memory cache
+const CACHE_TTL_MS = 10 * 1000; // 10s in-memory cache
 
 export async function fetchGlobalEvents(force = false) {
   const now = Date.now();
@@ -141,7 +159,8 @@ export async function fetchGlobalEvents(force = false) {
 
   inFlightPromise = (async () => {
     try {
-      const res = await fetch('/api/events', {
+      const url = force ? `/api/events?_t=${Date.now()}` : '/api/events';
+      const res = await fetch(url, {
         headers: { 'Accept': 'application/json' },
       });
       if (res.ok) {
@@ -149,7 +168,7 @@ export async function fetchGlobalEvents(force = false) {
         if (Array.isArray(data) && data.length > 0) {
           memoryCache = data;
           lastFetchTime = Date.now();
-          saveStoredEvents(data);
+          saveStoredEvents(data, false);
           return data;
         }
       }
