@@ -1,47 +1,22 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import { DEFAULT_VENUES } from '@/data/venues';
+import { getEvents, setEvents } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
-
-const EVENTS_FILE = path.join(process.cwd(), 'events.json');
-
-function readEventsFile() {
-  try {
-    if (fs.existsSync(EVENTS_FILE)) {
-      const content = fs.readFileSync(EVENTS_FILE, 'utf8');
-      return JSON.parse(content);
-    }
-  } catch (err) {
-    console.error('Error reading events.json:', err);
-  }
-  return DEFAULT_VENUES;
-}
-
-function writeEventsFile(events) {
-  try {
-    fs.writeFileSync(EVENTS_FILE, JSON.stringify(events, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing events.json:', err);
-    return false;
-  }
-}
 
 export async function PUT(request, { params }) {
   try {
     const { id } = await params;
     const updateData = await request.json();
-    let events = [...readEventsFile()];
+    const events = await getEvents();
     const index = events.findIndex((e) => e.id === id);
     if (index === -1) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
     events[index] = { ...events[index], ...updateData };
-    writeEventsFile(events);
+    await setEvents(events);
     return NextResponse.json({ success: true, events, message: 'Event updated globally' });
   } catch (err) {
+    console.error('PUT /api/events/[id] error:', err);
     return NextResponse.json({ error: 'Failed to update event' }, { status: 500 });
   }
 }
@@ -49,15 +24,15 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { id } = await params;
-    let events = [...readEventsFile()];
-    const initialLen = events.length;
-    events = events.filter((e) => e.id !== id);
-    if (events.length === initialLen) {
+    const events = await getEvents();
+    const filtered = events.filter((e) => e.id !== id);
+    if (filtered.length === events.length) {
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
-    writeEventsFile(events);
-    return NextResponse.json({ success: true, events, message: 'Event deleted globally' });
+    await setEvents(filtered);
+    return NextResponse.json({ success: true, events: filtered, message: 'Event deleted globally' });
   } catch (err) {
+    console.error('DELETE /api/events/[id] error:', err);
     return NextResponse.json({ error: 'Failed to delete event' }, { status: 500 });
   }
 }
