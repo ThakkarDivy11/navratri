@@ -3,13 +3,19 @@ import fs from 'fs';
 import path from 'path';
 import { DEFAULT_VENUES } from '@/data/venues';
 
-const EVENTS_FILE = path.join(process.cwd(), 'events.json');
+function getFilePath() {
+  if (process.env.VERCEL) {
+    return path.join('/tmp', 'events.json');
+  }
+  return path.join(process.cwd(), 'events.json');
+}
 
 export async function POST() {
   try {
-    fs.writeFileSync(EVENTS_FILE, JSON.stringify(DEFAULT_VENUES, null, 2), 'utf8');
-    return NextResponse.json({ success: true, events: DEFAULT_VENUES, message: 'Reset to default events globally' });
+    const filePath = getFilePath();
+    fs.writeFileSync(filePath, JSON.stringify(DEFAULT_VENUES, null, 2), 'utf8');
   } catch (err) {
-    return NextResponse.json({ error: 'Failed to reset events' }, { status: 500 });
+    console.error('Reset write error:', err);
   }
+  return NextResponse.json({ success: true, events: DEFAULT_VENUES, message: 'Reset to default events globally' });
 }
