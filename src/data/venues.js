@@ -127,6 +127,19 @@ export function saveStoredEvents(events) {
 }
 
 export async function fetchGlobalEvents() {
+  try {
+    const res = await fetch('/api/events', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        // Save to localStorage as cache
+        saveStoredEvents(data);
+        return data;
+      }
+    }
+  } catch (e) {
+    console.error('fetchGlobalEvents error:', e);
+  }
   return getStoredEvents();
 }
 
