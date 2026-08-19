@@ -41,12 +41,20 @@ export default function AdminPage() {
   const showToast = (msg, type = 'success') => {
     setToastMsg(msg);
     setToastType(type);
-    setTimeout(() => setToastMsg(''), 3500);
+    setTimeout(() => setToastMsg(''), 4000);
   };
 
-  const loadAdminEvents = () => {
-    const data = getStoredEvents();
-    setEvents(data);
+  const loadAdminEvents = async () => {
+    try {
+      const res = await fetch('/api/events');
+      if (res.ok) {
+        const data = await res.json();
+        setEvents(data);
+        saveStoredEvents(data);
+        return;
+      }
+    } catch (e) {}
+    setEvents(getStoredEvents());
   };
 
   useEffect(() => {
@@ -118,19 +126,49 @@ export default function AdminPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveEvent = (e) => {
+  const handleSaveEvent = async (e) => {
     e.preventDefault();
+    try {
+      let res;
+      if (editingId) {
+        res = await fetch(`/api/events/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      } else {
+        res = await fetch('/api/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      }
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.events) {
+          setEvents(data.events);
+          saveStoredEvents(data.events);
+        }
+        showToast(editingId ? 'Event updated!' : 'New event added!', 'success');
+        setShowForm(false);
+        handleResetForm();
+        return;
+      }
+    } catch (err) {
+      console.error('API Save Error:', err);
+    }
+
     let current = [...events];
     if (editingId) {
       const idx = current.findIndex((ev) => ev.id === editingId);
       if (idx !== -1) current[idx] = { ...current[idx], ...formData };
-      showToast('Event updated successfully!', 'success');
     } else {
       current.unshift({ id: 'custom_' + Date.now(), ...formData, isDefault: false });
-      showToast('New event added!', 'success');
     }
     setEvents(current);
     saveStoredEvents(current);
+    showToast('Saved!', 'success');
     setShowForm(false);
     handleResetForm();
   };
@@ -154,16 +192,46 @@ export default function AdminPage() {
     setShowForm(true);
   };
 
-  const handleDeleteEvent = (id) => {
+  const handleDeleteEvent = async (id) => {
     if (!confirm('Delete this event?')) return;
+    try {
+      const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.events) {
+          setEvents(data.events);
+          saveStoredEvents(data.events);
+        }
+        showToast('Event deleted!', 'success');
+        return;
+      }
+    } catch (err) {
+      console.error('API Delete Error:', err);
+    }
+
     const current = events.filter((ev) => ev.id !== id);
     setEvents(current);
     saveStoredEvents(current);
     showToast('Event deleted!', 'success');
   };
 
-  const handleResetDefaults = () => {
+  const handleResetDefaults = async () => {
     if (!confirm('Reset all events to default system venues?')) return;
+    try {
+      const res = await fetch('/api/events/reset', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.events) {
+          setEvents(data.events);
+          saveStoredEvents(data.events);
+        }
+        showToast('Reset to default events!', 'success');
+        return;
+      }
+    } catch (err) {
+      console.error('API Reset Error:', err);
+    }
+
     setEvents(DEFAULT_VENUES);
     saveStoredEvents(DEFAULT_VENUES);
     showToast('Reset to default events!', 'success');
@@ -184,7 +252,7 @@ export default function AdminPage() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       try {
         const imported = JSON.parse(evt.target.result);
         if (Array.isArray(imported)) {

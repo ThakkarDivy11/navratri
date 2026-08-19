@@ -3,39 +3,28 @@ import fs from 'fs';
 import path from 'path';
 import { DEFAULT_VENUES } from '@/data/venues';
 
-let inMemoryEvents = null;
+export const dynamic = 'force-dynamic';
 
-function getFilePath() {
-  if (process.env.VERCEL) {
-    return path.join('/tmp', 'events.json');
-  }
-  return path.join(process.cwd(), 'events.json');
-}
+const EVENTS_FILE = path.join(process.cwd(), 'events.json');
 
 function readEventsFile() {
-  if (inMemoryEvents) return inMemoryEvents;
   try {
-    const filePath = getFilePath();
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath, 'utf8');
-      inMemoryEvents = JSON.parse(content);
-      return inMemoryEvents;
+    if (fs.existsSync(EVENTS_FILE)) {
+      const content = fs.readFileSync(EVENTS_FILE, 'utf8');
+      return JSON.parse(content);
     }
   } catch (err) {
-    console.error('Error reading file:', err);
+    console.error('Error reading events.json:', err);
   }
-  inMemoryEvents = [...DEFAULT_VENUES];
-  return inMemoryEvents;
+  return DEFAULT_VENUES;
 }
 
 function writeEventsFile(events) {
-  inMemoryEvents = events;
   try {
-    const filePath = getFilePath();
-    fs.writeFileSync(filePath, JSON.stringify(events, null, 2), 'utf8');
+    fs.writeFileSync(EVENTS_FILE, JSON.stringify(events, null, 2), 'utf8');
     return true;
   } catch (err) {
-    console.error('File write error:', err);
+    console.error('Error writing events.json:', err);
     return false;
   }
 }
@@ -62,7 +51,7 @@ export async function POST(request) {
     newEvent.isDefault = false;
     events.unshift(newEvent);
     writeEventsFile(events);
-    return NextResponse.json({ success: true, events, message: 'Event added globally for all users' });
+    return NextResponse.json({ success: true, events, message: 'Event added globally' });
   } catch (err) {
     return NextResponse.json({ error: 'Failed to add event' }, { status: 500 });
   }
