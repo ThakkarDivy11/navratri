@@ -83,6 +83,9 @@ export const metadata = {
     shortcut: '/assets/rangsetu_logo.jpg',
     apple: '/assets/rangsetu_logo.jpg',
   },
+  verification: {
+    google: 'googledc62c8e26a94a286',
+  },
   category: 'Events & Ticket Procurement',
 };
 

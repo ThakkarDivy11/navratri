@@ -5,7 +5,7 @@
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
   ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '')
-  : 'https://rangsetu.com';
+  : 'https://rangsetu.divythakkar.in';
 
 export const siteConfig = {
   name: 'RangSetu',
