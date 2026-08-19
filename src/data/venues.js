@@ -127,16 +127,6 @@ export function saveStoredEvents(events) {
 }
 
 export async function fetchGlobalEvents() {
-  try {
-    const res = await fetch('/api/events', { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      saveStoredEvents(data);
-      return data;
-    }
-  } catch (e) {
-    // fallback to cache
-  }
   return getStoredEvents();
 }
 

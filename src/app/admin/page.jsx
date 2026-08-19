@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { fetchGlobalEvents, saveStoredEvents, DEFAULT_VENUES } from '@/data/venues';
+import { getStoredEvents, saveStoredEvents, DEFAULT_VENUES } from '@/data/venues';
 import {
   FaLock, FaPlus, FaXmark, FaCheck, FaPenToSquare,
   FaTrashCan, FaRotateLeft, FaFileExport, FaFileImport,
@@ -44,11 +44,9 @@ export default function AdminPage() {
     setTimeout(() => setToastMsg(''), 3500);
   };
 
-  const loadAdminEvents = async () => {
-    const data = await fetchGlobalEvents();
-    if (data && Array.isArray(data)) {
-      setEvents(data);
-    }
+  const loadAdminEvents = () => {
+    const data = getStoredEvents();
+    setEvents(data);
   };
 
   useEffect(() => {
@@ -120,50 +118,19 @@ export default function AdminPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveEvent = async (e) => {
+  const handleSaveEvent = (e) => {
     e.preventDefault();
-    try {
-      let res;
-      if (editingId) {
-        res = await fetch(`/api/events/${editingId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-      } else {
-        res = await fetch('/api/events', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-      }
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data.events) {
-          setEvents(data.events);
-          saveStoredEvents(data.events);
-        }
-        showToast(editingId ? 'Event updated globally for all users!' : 'New event added globally for all users!', 'success');
-        setShowForm(false);
-        handleResetForm();
-        return;
-      }
-    } catch (err) {
-      console.error('API Save Error:', err);
-    }
-
-    // Local fallback
     let current = [...events];
     if (editingId) {
       const idx = current.findIndex((ev) => ev.id === editingId);
       if (idx !== -1) current[idx] = { ...current[idx], ...formData };
+      showToast('Event updated successfully!', 'success');
     } else {
       current.unshift({ id: 'custom_' + Date.now(), ...formData, isDefault: false });
+      showToast('New event added!', 'success');
     }
     setEvents(current);
     saveStoredEvents(current);
-    showToast('Saved locally!', 'success');
     setShowForm(false);
     handleResetForm();
   };
@@ -187,46 +154,16 @@ export default function AdminPage() {
     setShowForm(true);
   };
 
-  const handleDeleteEvent = async (id) => {
-    if (!confirm('Super Admin Warning: Delete this event permanently for ALL users across all devices?')) return;
-    try {
-      const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.events) {
-          setEvents(data.events);
-          saveStoredEvents(data.events);
-        }
-        showToast('Event deleted globally for all users!', 'success');
-        return;
-      }
-    } catch (err) {
-      console.error('API Delete Error:', err);
-    }
-
+  const handleDeleteEvent = (id) => {
+    if (!confirm('Delete this event?')) return;
     const current = events.filter((ev) => ev.id !== id);
     setEvents(current);
     saveStoredEvents(current);
     showToast('Event deleted!', 'success');
   };
 
-  const handleResetDefaults = async () => {
-    if (!confirm('Reset all events to default system venues for ALL users?')) return;
-    try {
-      const res = await fetch('/api/events/reset', { method: 'POST' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.events) {
-          setEvents(data.events);
-          saveStoredEvents(data.events);
-        }
-        showToast('Reset to default events globally!', 'success');
-        return;
-      }
-    } catch (err) {
-      console.error('API Reset Error:', err);
-    }
-
+  const handleResetDefaults = () => {
+    if (!confirm('Reset all events to default system venues?')) return;
     setEvents(DEFAULT_VENUES);
     saveStoredEvents(DEFAULT_VENUES);
     showToast('Reset to default events!', 'success');
@@ -247,7 +184,7 @@ export default function AdminPage() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = async (evt) => {
+    reader.onload = (evt) => {
       try {
         const imported = JSON.parse(evt.target.result);
         if (Array.isArray(imported)) {
