@@ -11,25 +11,31 @@ export const siteConfig = {
   name: 'RangSetu',
   legalName: 'RangSetu Navratri Services Ahmedabad',
   siteUrl: SITE_URL,
-  title: 'RANGSETU — B2B Navratri Passes Ahmedabad 2026 | Bulk Garba Pass Procurement',
-  titleTemplate: '%s | RangSetu — B2B Navratri Passes Ahmedabad',
+  title: 'RANGSETU — Mandli Garba Passes Ahmedabad 2026 | Rudaah & Raataldi B2B Passes',
+  titleTemplate: '%s | RangSetu — Mandli Garba Passes Ahmedabad',
   description:
-    'Ahmedabad’s premier B2B Navratri pass procurement platform. Source authentic bulk garba passes for Karnavati Club, Rajpath Club, Mirchi Rock N Dhol, Suvarn, Red Raas & Shankus. Direct B2B rates, physical & digital passes, and instant WhatsApp support (+91 96649 25159).',
-  tagline: 'Direct B2B Navratri Pass Procurement & Wholesale Rates in Ahmedabad',
+    'Ahmedabad’s premier Mandli Garba B2B pass portal. Source authentic bulk passes for Rudaah Mandli Garba, Raataldi Mandli Garba, Karnavati Club, Rajpath Club & Mirchi. Direct B2B rates, physical & digital passes, and instant WhatsApp support (+91 96649 25159).',
+  tagline: 'Direct B2B Mandli Garba Pass Procurement & Wholesale Rates in Ahmedabad',
   
   // Keyword Strategy
   keywords: [
-    // Primary Keywords
+    // Primary Mandli Garba Keywords
+    'Mandli Garba passes Ahmedabad 2026',
+    'Rudaah Mandli Garba passes',
+    'Raataldi Mandli Garba passes',
+    'Rudaah Garba Ahmedabad',
+    'Raataldi Garba passes 2026',
+    'Mandli Garba passes price',
+    'Ahmedabad Mandli Garba tickets',
+    'B2B Mandli Garba passes',
+    // Venue & General Keywords
     'Navratri passes Ahmedabad 2026',
     'B2B Navratri passes',
     'bulk Garba passes Ahmedabad',
     'Navratri pass booking Ahmedabad',
-    // Venue Specific Keywords
     'Karnavati Club Garba passes 2026',
     'Rajpath Club Navratri passes',
     'Mirchi Rock N Dhol passes Ahmedabad',
-    'Suvarn Navratri Garba passes',
-    'Red Raas VIP Garba passes',
     'Shankus Mega Garba Arena tickets',
     // Audience & Commercial Intent Keywords
     'corporate Navratri passes Ahmedabad',

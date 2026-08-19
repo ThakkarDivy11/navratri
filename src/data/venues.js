@@ -3,6 +3,38 @@ export const LOCAL_STORAGE_KEY = 'navratri_custom_events';
 
 export const DEFAULT_VENUES = [
   {
+    id: 'rudaah',
+    name: 'Rudaah Mandli Garba 2026',
+    location: 'S.G. Highway, Bodakdev',
+    city: 'Ahmedabad',
+    dates: 'Oct 11 – Oct 19, 2026',
+    artist: 'Traditional Mandli Folk Troupe',
+    type: 'ahmedabad',
+    passTypes: 'General / VIP Mandli Pass',
+    formats: 'Physical & Online Available',
+    image: '/assets/ruda_garba.png',
+    b2bPrice: 'Get B2B Rate',
+    badge: 'Authentic Mandli Garba',
+    availability: 'High Inventory',
+    isDefault: true
+  },
+  {
+    id: 'raataldi',
+    name: 'Raataldi Mandli Garba 2026',
+    location: 'Sindhu Bhavan Road (SBR)',
+    city: 'Ahmedabad',
+    dates: 'Oct 11 – Oct 19, 2026',
+    artist: 'Raataldi Live Dhol & Folk Band',
+    type: 'ahmedabad',
+    passTypes: 'General / VIP / Premium Lounge',
+    formats: 'Physical Pass & Online',
+    image: '/assets/raatledo.png',
+    b2bPrice: 'Get B2B Rate',
+    badge: 'Exclusive Mandli Garba',
+    availability: 'Selling Fast',
+    isDefault: true
+  },
+  {
     id: 'karnavati',
     name: 'Karnavati Club Garba 2026',
     location: 'S.G. Highway, Bodakdev',
@@ -48,38 +80,6 @@ export const DEFAULT_VENUES = [
     b2bPrice: 'Get B2B Rate',
     badge: 'Youth Choice',
     availability: 'High Inventory',
-    isDefault: true
-  },
-  {
-    id: 'suvarn',
-    name: 'Suvarn Navratri Garba 2026',
-    location: 'S.G. Highway, Gota',
-    city: 'Ahmedabad',
-    dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Aishwarya Majmudar',
-    type: 'ahmedabad',
-    passTypes: 'General / VIP / Premium',
-    formats: 'Physical Pass',
-    image: '/assets/ruda_garba.png',
-    b2bPrice: 'Get B2B Rate',
-    badge: 'Grand Arena',
-    availability: 'High Inventory',
-    isDefault: true
-  },
-  {
-    id: 'redraas',
-    name: 'Red Raas VIP Garba 2026',
-    location: 'Prahlad Nagar Extension',
-    city: 'Ahmedabad',
-    dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Bhoomi Trivedi',
-    type: 'ahmedabad',
-    passTypes: 'VIP / Premium Lounge',
-    formats: 'Physical Pass',
-    image: '/assets/raatledo.png',
-    b2bPrice: 'Get B2B Rate',
-    badge: 'Ultra VIP',
-    availability: 'Limited Seats',
     isDefault: true
   },
   {
