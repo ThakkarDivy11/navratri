@@ -19,7 +19,12 @@ export const metadata = {
   title: 'RANGSETU — B2B Navratri Passes Ahmedabad 2026',
   description: 'RangSetu — B2B Navratri Pass Procurement Portal in Ahmedabad. Connect with top Garba venues (Karnavati, Rajpath, Mirchi, Suvarn, Red Raas, Shankus) for bulk B2B pass orders. Direct WhatsApp line: +91 96649 25159.',
   icons: {
-    icon: '/assets/rangsetu_logo.jpg',
+    icon: [
+      { url: '/assets/rangsetu_logo.jpg' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/assets/rangsetu_logo.jpg',
+    apple: '/assets/rangsetu_logo.jpg',
   },
 };
 
