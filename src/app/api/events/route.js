@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getEvents, setEvents } from '@/lib/db';
+import { getEvents, createEvent } from '@/lib/db';
 
 export const revalidate = 60;
 
@@ -18,13 +18,8 @@ export async function POST(request) {
     if (!newEvent || !newEvent.name) {
       return NextResponse.json({ error: 'Invalid event data' }, { status: 400 });
     }
-    const events = await getEvents();
-    if (!newEvent.id) {
-      newEvent.id = 'custom_' + Date.now();
-    }
-    newEvent.isDefault = false;
-    const updated = [newEvent, ...events];
-    await setEvents(updated);
+    await createEvent(newEvent);
+    const updated = await getEvents();
     return NextResponse.json({ success: true, events: updated, message: 'Event added globally' });
   } catch (err) {
     console.error('POST /api/events error:', err);
