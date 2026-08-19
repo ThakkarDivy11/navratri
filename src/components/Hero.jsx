@@ -8,8 +8,8 @@ export default function Hero({ onRequestPasses }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
-    { src: '/assets/ruda_garba.png', alt: 'Ruda Garba 2026 Ahmedabad' },
-    { src: '/assets/raatledo.png', alt: 'Raatledo City of Dreams Garba 2026' },
+    { src: '/assets/ruda_garba.png', alt: 'Ruda Garba 2026 Ahmedabad B2B Passes' },
+    { src: '/assets/raatledo.png', alt: 'Raatledo City of Dreams Garba 2026 Ahmedabad Bulk Passes' },
   ];
 
   const nextSlide = useCallback(() => {

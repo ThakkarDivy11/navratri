@@ -1,5 +1,7 @@
 import './globals.css';
 import { Outfit, Plus_Jakarta_Sans } from 'next/font/google';
+import { siteConfig } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -16,8 +18,63 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'RANGSETU — B2B Navratri Passes Ahmedabad 2026',
-  description: 'RangSetu — B2B Navratri Pass Procurement Portal in Ahmedabad. Connect with top Garba venues (Karnavati, Rajpath, Mirchi, Suvarn, Red Raas, Shankus) for bulk B2B pass orders. Direct WhatsApp line: +91 96649 25159.',
+  metadataBase: new URL(siteConfig.siteUrl),
+  title: {
+    default: siteConfig.title,
+    template: siteConfig.titleTemplate,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  keywords: siteConfig.keywords,
+  authors: [{ name: 'RangSetu B2B Team', url: siteConfig.siteUrl }],
+  creator: 'RangSetu',
+  publisher: 'RangSetu',
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  },
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.siteUrl,
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    alternateLocale: siteConfig.alternateLocales,
+    type: 'website',
+    images: [
+      {
+        url: siteConfig.assets.ogImage,
+        width: siteConfig.assets.ogImageWidth,
+        height: siteConfig.assets.ogImageHeight,
+        alt: siteConfig.assets.ogImageAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.assets.ogImage],
+    creator: '@rangsetu',
+    site: '@rangsetu',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/assets/rangsetu_logo.jpg' },
@@ -26,15 +83,18 @@ export const metadata = {
     shortcut: '/assets/rangsetu_logo.jpg',
     apple: '/assets/rangsetu_logo.jpg',
   },
+  category: 'Events & Ticket Procurement',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakarta.variable}`}>
       <body>
+        <JsonLd />
         <div className="pattern-overlay"></div>
         {children}
       </body>
     </html>
   );
 }
+

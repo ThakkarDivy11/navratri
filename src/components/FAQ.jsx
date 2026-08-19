@@ -27,11 +27,21 @@ export default function FAQ() {
             const isActive = activeIndex === index;
             return (
               <div className={`faq-item${isActive ? ' active' : ''}`} key={index}>
-                <button className="faq-question" onClick={() => toggleIndex(index)}>
+                <button
+                  className="faq-question"
+                  onClick={() => toggleIndex(index)}
+                  aria-expanded={isActive}
+                  aria-controls={`faq-answer-${index}`}
+                >
                   {item.question}
                   <FaChevronDown />
                 </button>
-                <div className="faq-answer">
+                <div
+                  className="faq-answer"
+                  id={`faq-answer-${index}`}
+                  role="region"
+                  aria-label={item.question}
+                >
                   {item.answer}
                 </div>
               </div>

@@ -36,7 +36,14 @@ export default function Contact() {
         </div>
 
         <div style={{ textAlign: 'center' }}>
-          <a href="https://wa.me/919664925159" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: '14px 32px' }}>
+          <a
+            href="https://wa.me/919664925159"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+            style={{ padding: '14px 32px' }}
+            aria-label="Chat directly with RangSetu B2B Team on WhatsApp"
+          >
             <FaWhatsapp /> Chat on WhatsApp
           </a>
         </div>

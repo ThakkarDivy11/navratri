@@ -7,8 +7,14 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <a href="#home" className="brand-logo">
-              <Image src="/assets/rangsetu_logo.jpg" alt="RANGSETU Logo" className="brand-logo-img" width={38} height={38} />
+            <a href="#home" className="brand-logo" aria-label="RangSetu Homepage">
+              <Image
+                src="/assets/rangsetu_logo.jpg"
+                alt="RangSetu — B2B Navratri Passes Ahmedabad Logo"
+                className="brand-logo-img"
+                width={38}
+                height={38}
+              />
               <div className="brand-text">
                 <span className="brand-name" style={{ color: '#FFF' }}>RANG<span className="text-blaze">SETU</span></span>
                 <span className="brand-sub">B2B NAVRATRI PASSES • AHMEDABAD 2026</span>
@@ -19,30 +25,43 @@ export default function Footer() {
 
           <div className="footer-col">
             <h4>Navigation</h4>
-            <ul className="footer-links">
-              <li><a href="#home">Home</a></li>
-              <li><a href="#events">Events</a></li>
-              <li><a href="#b2b-benefits">B2B</a></li>
-              <li><a href="#faq">FAQ</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
+            <nav aria-label="Footer Navigation">
+              <ul className="footer-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#b2b-benefits">B2B</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </nav>
           </div>
 
           <div className="footer-col">
             <h4>Support</h4>
             <ul className="footer-links">
               <li>
-                <a href="https://wa.me/919664925159" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://wa.me/919664925159"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Chat with RangSetu Support on WhatsApp +91 96649 25159"
+                >
                   <FaWhatsapp /> WhatsApp (+91 96649 25159)
                 </a>
               </li>
               <li>
-                <a href="tel:+919664925159">
+                <a
+                  href="tel:+919664925159"
+                  aria-label="Call RangSetu Support at +91 96649 25159"
+                >
                   <FaPhone /> Call (+91 96649 25159)
                 </a>
               </li>
               <li>
-                <a href="mailto:b2b@navratripasses.com">
+                <a
+                  href="mailto:b2b@navratripasses.com"
+                  aria-label="Email RangSetu at b2b@navratripasses.com"
+                >
                   <FaEnvelope /> Email Us
                 </a>
               </li>
@@ -52,9 +71,9 @@ export default function Footer() {
           <div className="footer-col">
             <h4>Legal</h4>
             <ul className="footer-links">
-              <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Refund Policy</a></li>
+              <li><a href="#faq" title="Terms & Pass Guidelines">Terms &amp; Conditions</a></li>
+              <li><a href="#faq" title="Privacy Policy">Privacy Policy</a></li>
+              <li><a href="#faq" title="Refund and Delivery Guidelines">Refund Policy</a></li>
             </ul>
           </div>
         </div>

@@ -84,7 +84,7 @@ export default function EventCatalogue({ onRequestPasses }) {
               <div className="event-image-container">
                 <Image
                   src={venue.image || '/assets/venue_karnavati.jpg'}
-                  alt={venue.name}
+                  alt={`${venue.name} — Ahmedabad Navratri 2026 Venue`}
                   width={400}
                   height={225}
                   className="event-card-img"
@@ -129,6 +129,7 @@ export default function EventCatalogue({ onRequestPasses }) {
                   <button
                     className="btn-primary"
                     onClick={() => onRequestPasses(venue.name, 'General')}
+                    aria-label={`Request B2B passes for ${venue.name}`}
                   >
                     Request Passes
                   </button>
