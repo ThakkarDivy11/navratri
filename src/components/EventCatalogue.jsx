@@ -9,31 +9,24 @@ export default function EventCatalogue({ onRequestPasses }) {
   const [currentFilter, setCurrentFilter] = useState('all');
   const [venues, setVenues] = useState([]);
 
-  const loadEvents = async () => {
-    const data = await fetchGlobalEvents();
-    if (data && Array.isArray(data)) {
-      setVenues(data);
-    }
-  };
-
   useEffect(() => {
-    // Initial local cache load
-    setVenues(getStoredEvents());
+    let isMounted = true;
 
-    // Fetch live global events from server
-    loadEvents();
+    // Initial load from localStorage/defaults
+    const initial = getStoredEvents();
+    if (initial && initial.length > 0) {
+      setVenues(initial);
+    }
 
-    // Auto-poll every 15 seconds for live global updates across all devices
-    const interval = setInterval(() => {
-      loadEvents();
-    }, 15000);
-
-    const handleStorage = () => loadEvents();
-    window.addEventListener('storage', handleStorage);
+    // Fetch fresh events once from server in background
+    fetchGlobalEvents().then((data) => {
+      if (isMounted && data && Array.isArray(data) && data.length > 0) {
+        setVenues(data);
+      }
+    });
 
     return () => {
-      clearInterval(interval);
-      window.removeEventListener('storage', handleStorage);
+      isMounted = false;
     };
   }, []);
 

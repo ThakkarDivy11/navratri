@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getEvents, setEvents } from '@/lib/db';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function GET() {
   const events = await getEvents();
   return NextResponse.json(events, {
-    headers: { 'Cache-Control': 'no-store, max-age=0' },
+    headers: {
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+    },
   });
 }
 

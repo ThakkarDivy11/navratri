@@ -120,27 +120,50 @@ export function saveStoredEvents(events) {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(events));
-    window.dispatchEvent(new Event('storage'));
   } catch (e) {
     console.error('Error saving events', e);
   }
 }
 
-export async function fetchGlobalEvents() {
-  try {
-    const res = await fetch('/api/events', { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        // Save to localStorage as cache
-        saveStoredEvents(data);
-        return data;
-      }
-    }
-  } catch (e) {
-    console.error('fetchGlobalEvents error:', e);
+let inFlightPromise = null;
+let memoryCache = null;
+let lastFetchTime = 0;
+const CACHE_TTL_MS = 60 * 1000; // 60s in-memory cache
+
+export async function fetchGlobalEvents(force = false) {
+  const now = Date.now();
+  if (!force && memoryCache && now - lastFetchTime < CACHE_TTL_MS) {
+    return memoryCache;
   }
-  return getStoredEvents();
+  if (inFlightPromise) {
+    return inFlightPromise;
+  }
+
+  inFlightPromise = (async () => {
+    try {
+      const res = await fetch('/api/events', {
+        headers: { 'Accept': 'application/json' },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          memoryCache = data;
+          lastFetchTime = Date.now();
+          saveStoredEvents(data);
+          return data;
+        }
+      }
+    } catch (e) {
+      console.error('fetchGlobalEvents error:', e);
+    } finally {
+      inFlightPromise = null;
+    }
+    const stored = getStoredEvents();
+    memoryCache = stored;
+    return stored;
+  })();
+
+  return inFlightPromise;
 }
 
 export const FAQ_DATA = [
