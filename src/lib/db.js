@@ -7,10 +7,10 @@ let redis = null;
 
 function getRedis() {
   if (!redis) {
-    const url = process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
     if (!url || !token) {
-      console.error('Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN');
+      console.error('Missing KV_REST_API_URL/TOKEN or UPSTASH_REDIS_REST_URL/TOKEN');
       return null;
     }
     redis = new Redis({ url, token });
