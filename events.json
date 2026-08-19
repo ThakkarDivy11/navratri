@@ -1,21 +1,5 @@
 [
   {
-    "id": "karnavati",
-    "name": "Karnavati Club Garba 2026",
-    "location": "S.G. Highway, Bodakdev",
-    "city": "Ahmedabad",
-    "dates": "Oct 11 – Oct 19, 2026",
-    "artist": "Kinjal Dave & Live Band",
-    "type": "ahmedabad",
-    "passTypes": "General / VIP / Premium",
-    "formats": "Physical & Online Available",
-    "image": "/assets/venue_karnavati.jpg",
-    "b2bPrice": "Get B2B Rate",
-    "badge": "Verified B2B Venue",
-    "availability": "High Inventory",
-    "isDefault": true
-  },
-  {
     "id": "rajpath",
     "name": "Rajpath Club Garba 2026",
     "location": "S.G. Highway, Bodakdev",
