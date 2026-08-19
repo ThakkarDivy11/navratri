@@ -46,14 +46,18 @@ export default function AdminPage() {
 
   const loadAdminEvents = async () => {
     try {
-      const res = await fetch('/api/events');
+      const res = await fetch(`/api/events?admin=true&_t=${Date.now()}`, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
-        setEvents(data);
-        saveStoredEvents(data);
-        return;
+        if (Array.isArray(data)) {
+          setEvents(data);
+          saveStoredEvents(data);
+          return;
+        }
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('loadAdminEvents error:', e);
+    }
     setEvents(getStoredEvents());
   };
 
@@ -194,24 +198,24 @@ export default function AdminPage() {
 
   const handleDeleteEvent = async (id) => {
     if (!confirm('Delete this event?')) return;
+    const updated = events.filter((ev) => ev.id !== id);
+    setEvents(updated);
+    saveStoredEvents(updated);
+
     try {
       const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
       if (res.ok) {
         const data = await res.json();
-        if (data.events) {
+        if (data.events && Array.isArray(data.events)) {
           setEvents(data.events);
           saveStoredEvents(data.events);
         }
-        showToast('Event deleted!', 'success');
+        showToast('Event deleted permanently!', 'success');
         return;
       }
     } catch (err) {
       console.error('API Delete Error:', err);
     }
-
-    const current = events.filter((ev) => ev.id !== id);
-    setEvents(current);
-    saveStoredEvents(current);
     showToast('Event deleted!', 'success');
   };
 

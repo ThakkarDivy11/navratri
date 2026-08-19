@@ -1,8 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    cpus: 4,
-  },
-};
+const nextConfig = {};
 
 export default nextConfig;

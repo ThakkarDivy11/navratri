@@ -3,11 +3,23 @@ import { getEvents, createEvent } from '@/lib/db';
 
 export const revalidate = 60;
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const isAdmin = searchParams.get('admin') === 'true';
+
   const events = await getEvents();
+
+  if (isAdmin) {
+    return NextResponse.json(events, {
+      headers: {
+        'Cache-Control': 'no-store, max-age=0, must-revalidate',
+      },
+    });
+  }
+
   return NextResponse.json(events, {
     headers: {
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120',
     },
   });
 }
