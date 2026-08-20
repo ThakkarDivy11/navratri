@@ -15,6 +15,9 @@ import Contact from '@/components/Contact';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import EnquiryModal from '@/components/EnquiryModal';
+import ComingSoonOverlay from '@/components/ComingSoonOverlay';
+
+const COMING_SOON_MODE = true;
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,6 +31,14 @@ export default function Home() {
     setModalFormat(format);
     setModalOpen(true);
   };
+
+  if (COMING_SOON_MODE) {
+    return (
+      <main className="coming-soon-page-wrapper">
+        <ComingSoonOverlay />
+      </main>
+    );
+  }
 
   return (
     <main>
