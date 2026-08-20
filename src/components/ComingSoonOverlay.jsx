@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { FaWhatsapp, FaPhone, FaCrown, FaStar, FaTicket, FaSnowflake } from 'react-icons/fa6';
+import { FaWhatsapp, FaPhone, FaStar, FaTicket, FaShieldHalved, FaBoxArchive } from 'react-icons/fa6';
 import { BUSINESS_OWNER_WHATSAPP } from '@/data/venues';
 
 export default function ComingSoonOverlay() {
   const whatsappUrl = `https://wa.me/${BUSINESS_OWNER_WHATSAPP}?text=${encodeURIComponent(
-    '🎉 *RANGSETU B2B NAVRATRI 2026 EARLY ENQUIRY*\n---------------------------------------\nHi RangSetu Team, I want to book/enquire about bulk passes for Mandli Garba & AC Dome events in Ahmedabad.\n\n👤 *My Name:*\n🎟️ *Expected Quantity:*\n📍 *Preferred Venue (Rudaah / Raataldi / AC Dome):*'
+    '🎉 *RANGSETU B2B NAVRATRI 2026 EARLY ENQUIRY*\n---------------------------------------\nHi RangSetu Team, I want to enquire / book bulk passes for Ahmedabad Navratri 2026 events.\n\n👤 *My Name:*\n🎟️ *Required Quantity (20+ Passes):*\n📍 *Preferred Location / Event:*'
   )}`;
 
   return (
@@ -42,29 +42,28 @@ export default function ComingSoonOverlay() {
 
           {/* Main Headline */}
           <h1 className="coming-soon-title">
-            Ahmedabad Mandli &amp; AC Dome{' '}
-            <span className="text-gradient-festive">Bulk Passes Portal</span>
+            Ahmedabad Navratri 2026{' '}
+            <span className="text-gradient-festive">B2B Passes Portal</span>
           </h1>
 
           <p className="coming-soon-desc">
             We are curating verified source inventory &amp; wholesale B2B quotas for 
-            <strong> Rudaah Mandli Garba</strong>, <strong>Raataldi Mandli Garba</strong> &amp; 
-            <strong> Premium AC Dome Arenas</strong>. Official online booking goes live shortly!
+            Ahmedabad's most premier Navratri events. Official online booking goes live shortly!
           </p>
 
           {/* Feature Highlights Strip */}
           <div className="coming-soon-highlights">
             <div className="cs-chip">
-              <FaCrown className="text-gold" />
-              <span>Rudaah &amp; Raataldi Mandli</span>
-            </div>
-            <div className="cs-chip">
-              <FaSnowflake className="text-blue" />
-              <span>100% AC Dome Arenas</span>
+              <FaShieldHalved className="text-gold" />
+              <span>100% Genuine Passes</span>
             </div>
             <div className="cs-chip">
               <FaTicket className="text-blaze" />
               <span>Direct Wholesale B2B Rates</span>
+            </div>
+            <div className="cs-chip">
+              <FaBoxArchive className="text-blue" />
+              <span>Physical &amp; Digital Formats</span>
             </div>
           </div>
 
