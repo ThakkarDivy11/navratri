@@ -42,7 +42,7 @@ export default function ComingSoonOverlay() {
 
           {/* Main Headline */}
           <h1 className="coming-soon-title">
-            Ahmedabad Mandli &amp; AC Dome <br />
+            Ahmedabad Mandli &amp; AC Dome{' '}
             <span className="text-gradient-festive">Bulk Passes Portal</span>
           </h1>
 
