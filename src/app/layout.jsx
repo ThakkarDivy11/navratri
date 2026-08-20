@@ -2,6 +2,7 @@ import './globals.css';
 import { Outfit, Plus_Jakarta_Sans } from 'next/font/google';
 import { siteConfig } from '@/lib/seo';
 import JsonLd from '@/components/JsonLd';
+import { Analytics } from '@vercel/analytics/next';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -96,6 +97,7 @@ export default function RootLayout({ children }) {
         <JsonLd />
         <div className="pattern-overlay"></div>
         {children}
+        <Analytics />
       </body>
     </html>
   );
