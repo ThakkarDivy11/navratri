@@ -9,7 +9,7 @@ import {
   FaRightFromBracket, FaGlobe, FaLocationDot, FaGripVertical
 } from 'react-icons/fa6';
 
-const ADMIN_PIN = 'navratri2026';
+const ADMIN_PIN = 'divrang26';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -287,7 +287,7 @@ export default function AdminPage() {
             <input
               type="password"
               className="admin-pin-input"
-              placeholder="Enter PIN (navratri2026)"
+              placeholder="Enter PIN "
               value={pinInput}
               onChange={(e) => setPinInput(e.target.value)}
               autoFocus
@@ -527,7 +527,7 @@ export default function AdminPage() {
                 events.map((ev) => {
                   const isCustom = !ev.isDefault;
                   const availClass = ev.availability === 'High Inventory' ? 'high' :
-                                     ev.availability === 'Selling Fast' ? 'selling-fast' : 'limited';
+                    ev.availability === 'Selling Fast' ? 'selling-fast' : 'limited';
                   return (
                     <tr key={ev.id}>
                       <td>
