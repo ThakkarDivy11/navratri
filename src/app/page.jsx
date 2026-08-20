@@ -18,11 +18,11 @@ import EnquiryModal from '@/components/EnquiryModal';
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalVenue, setModalVenue] = useState('Karnavati Club Garba 2026');
+  const [modalVenue, setModalVenue] = useState('Rudaah Mandli Garba 2026');
   const [modalPass, setModalPass] = useState('General');
   const [modalFormat, setModalFormat] = useState('Physical Pass');
 
-  const handleRequestPasses = (venue = 'Karnavati Club Garba 2026', pass = 'General', format = 'Physical Pass') => {
+  const handleRequestPasses = (venue = 'Rudaah Mandli Garba 2026', pass = 'General', format = 'Physical Pass') => {
     setModalVenue(venue);
     setModalPass(pass);
     setModalFormat(format);

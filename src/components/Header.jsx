@@ -60,8 +60,8 @@ export default function Header({ onRequestPasses }) {
           </a>
           <button
             className="btn-primary"
-            onClick={() => { onRequestPasses('Karnavati Club Garba 2026', 'General'); closeMenu(); }}
-            aria-label="Request Navratri Passes"
+            onClick={() => { onRequestPasses('Rudaah Mandli Garba 2026', 'General'); closeMenu(); }}
+            aria-label="Request Mandli Garba Passes"
           >
             <FaWhatsapp /> Request Passes
           </button>

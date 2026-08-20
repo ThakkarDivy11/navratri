@@ -33,6 +33,10 @@ const EventSchema = new mongoose.Schema(
       type: String,
       default: 'ahmedabad',
     },
+    category: {
+      type: String,
+      default: 'mandli',
+    },
     passTypes: {
       type: String,
       default: 'General / VIP',
@@ -43,7 +47,7 @@ const EventSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: '/assets/venue_karnavati.jpg',
+      default: '/assets/ruda_garba.png',
     },
     b2bPrice: {
       type: String,
@@ -51,7 +55,7 @@ const EventSchema = new mongoose.Schema(
     },
     badge: {
       type: String,
-      default: 'Verified B2B Venue',
+      default: 'Authentic Mandli Garba',
     },
     availability: {
       type: String,

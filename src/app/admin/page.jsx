@@ -30,12 +30,13 @@ export default function AdminPage() {
     dates: 'Oct 11 – Oct 19, 2026',
     artist: '',
     type: 'ahmedabad',
+    category: 'mandli',
     passTypes: 'General / VIP',
     formats: 'Physical & Online Available',
-    badge: 'Verified B2B Venue',
+    badge: 'Authentic Mandli Garba',
     availability: 'High Inventory',
     b2bPrice: 'Get B2B Rate',
-    image: '/assets/venue_karnavati.jpg'
+    image: '/assets/ruda_garba.png'
   });
 
   const showToast = (msg, type = 'success') => {
@@ -97,12 +98,13 @@ export default function AdminPage() {
       dates: 'Oct 11 – Oct 19, 2026',
       artist: '',
       type: 'ahmedabad',
+      category: 'mandli',
       passTypes: 'General / VIP',
       formats: 'Physical & Online Available',
-      badge: 'Verified B2B Venue',
+      badge: 'Authentic Mandli Garba',
       availability: 'High Inventory',
       b2bPrice: 'Get B2B Rate',
-      image: '/assets/venue_karnavati.jpg'
+      image: '/assets/ruda_garba.png'
     });
   };
 
@@ -186,12 +188,13 @@ export default function AdminPage() {
       dates: ev.dates || 'Oct 11 – Oct 19, 2026',
       artist: ev.artist || '',
       type: ev.type || 'ahmedabad',
+      category: ev.category || 'mandli',
       passTypes: ev.passTypes || 'General',
       formats: ev.formats || 'Physical Pass',
-      badge: ev.badge || 'Verified B2B',
+      badge: ev.badge || 'Authentic Mandli Garba',
       availability: ev.availability || 'High Inventory',
       b2bPrice: ev.b2bPrice || 'Get B2B Rate',
-      image: ev.image || '/assets/venue_karnavati.jpg'
+      image: ev.image || '/assets/ruda_garba.png'
     });
     setShowForm(true);
   };
@@ -364,7 +367,7 @@ export default function AdminPage() {
                   <input
                     type="text"
                     className="admin-form-control"
-                    placeholder="e.g. Karnavati Club Garba 2026"
+                    placeholder="e.g. Rudaah Mandli Garba 2026"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
@@ -412,6 +415,18 @@ export default function AdminPage() {
                     onChange={(e) => setFormData({ ...formData, passTypes: e.target.value })}
                     required
                   />
+                </div>
+                <div>
+                  <label className="form-label" style={{ color: 'var(--admin-muted)' }}>Category</label>
+                  <select
+                    className="admin-form-control"
+                    value={formData.category || 'mandli'}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  >
+                    <option value="mandli">Mandli Garba</option>
+                    <option value="ac_dome">AC Dome Garba</option>
+                    <option value="other">Other Venue</option>
+                  </select>
                 </div>
                 <div>
                   <label className="form-label" style={{ color: 'var(--admin-muted)' }}>Availability</label>
@@ -520,7 +535,7 @@ export default function AdminPage() {
                       </td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <img src={ev.image || '/assets/venue_karnavati.jpg'} alt={ev.name} className="admin-event-thumb" />
+                          <img src={ev.image || '/assets/ruda_garba.png'} alt={ev.name} className="admin-event-thumb" />
                           <div>
                             <div style={{ fontWeight: 700, color: '#FFF' }}>{ev.name}</div>
                             <div style={{ fontSize: '0.78rem', color: 'var(--admin-muted)' }}>

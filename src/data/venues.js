@@ -10,6 +10,7 @@ export const DEFAULT_VENUES = [
     dates: 'Oct 11 – Oct 19, 2026',
     artist: 'Traditional Mandli Folk Troupe',
     type: 'ahmedabad',
+    category: 'mandli',
     passTypes: 'General / VIP Mandli Pass',
     formats: 'Physical & Online Available',
     image: '/assets/ruda_garba.png',
@@ -26,6 +27,7 @@ export const DEFAULT_VENUES = [
     dates: 'Oct 11 – Oct 19, 2026',
     artist: 'Raataldi Live Dhol & Folk Band',
     type: 'ahmedabad',
+    category: 'mandli',
     passTypes: 'General / VIP / Premium Lounge',
     formats: 'Physical Pass & Online',
     image: '/assets/raatledo.png',
@@ -35,79 +37,58 @@ export const DEFAULT_VENUES = [
     isDefault: true
   },
   {
-    id: 'karnavati',
-    name: 'Karnavati Club Garba 2026',
-    location: 'S.G. Highway, Bodakdev',
+    id: 'suvarn_ac_dome',
+    name: 'Suvarn AC Dome Garba 2026',
+    location: 'S.G. Highway, Gota',
     city: 'Ahmedabad',
     dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Kinjal Dave & Live Band',
+    artist: 'Aishwarya Majmudar & Live Symphony',
     type: 'ahmedabad',
-    passTypes: 'General / VIP / Premium',
-    formats: 'Physical & Online Available',
-    image: '/assets/venue_karnavati.jpg',
+    category: 'ac_dome',
+    passTypes: 'General / VIP AC Dome Pass',
+    formats: 'Physical Pass & Online',
+    image: '/assets/ruda_garba.png',
     b2bPrice: 'Get B2B Rate',
-    badge: 'Verified B2B Venue',
+    badge: '100% AC Dome Arena',
     availability: 'High Inventory',
     isDefault: true
   },
   {
-    id: 'rajpath',
-    name: 'Rajpath Club Garba 2026',
-    location: 'S.G. Highway, Bodakdev',
-    city: 'Ahmedabad',
-    dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Aditya Gadhvi & Troupe',
-    type: 'ahmedabad',
-    passTypes: 'General / VIP / Premium',
-    formats: 'Physical Pass',
-    image: '/assets/venue_rajpath.jpg',
-    b2bPrice: 'Get B2B Rate',
-    badge: 'Verified B2B Venue',
-    availability: 'Selling Fast',
-    isDefault: true
-  },
-  {
-    id: 'mirchi',
-    name: 'Mirchi Rock N Dhol 2026',
-    location: 'Sindhu Bhavan Road (SBR)',
-    city: 'Ahmedabad',
-    dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Parthiv Gohil & Darshan Raval',
-    type: 'ahmedabad',
-    passTypes: 'General / VIP',
-    formats: 'Physical & Online Available',
-    image: '/assets/venue_mirchi.jpg',
-    b2bPrice: 'Get B2B Rate',
-    badge: 'Youth Choice',
-    availability: 'High Inventory',
-    isDefault: true
-  },
-  {
-    id: 'shankus',
-    name: 'Shankus Mega Garba Arena',
+    id: 'shankus_ac_dome',
+    name: 'Shankus AC Mega Dome Arena 2026',
     location: 'S.G. Highway North',
     city: 'Ahmedabad',
     dates: 'Oct 11 – Oct 19, 2026',
-    artist: 'Arvind Vegda & Folk Band',
+    artist: 'Arvind Vegda & Live Folk Troupe',
     type: 'ahmedabad',
-    passTypes: 'General / Premium',
+    category: 'ac_dome',
+    passTypes: 'General / VIP / Premium Lounge',
     formats: 'Physical & Online Available',
-    image: '/assets/venue_karnavati.jpg',
+    image: '/assets/raatledo.png',
     b2bPrice: 'Get B2B Rate',
-    badge: 'Mega Ground',
-    availability: 'High Inventory',
+    badge: 'Grand AC Dome Arena',
+    availability: 'Selling Fast',
     isDefault: true
   }
 ];
 
 export const VENUES_DATA = DEFAULT_VENUES;
 
+const DEPRECATED_EVENT_IDS = new Set(['karnavati', 'rajpath', 'mirchi']);
+
 export function getStoredEvents() {
   if (typeof window === 'undefined') return DEFAULT_VENUES;
   try {
     const data = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (data !== null) {
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Filter out deprecated non-mandli events
+        const sanitized = parsed.filter((ev) => !DEPRECATED_EVENT_IDS.has(ev.id));
+        if (sanitized.length > 0) {
+          return sanitized;
+        }
+      }
     }
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_VENUES));
     return DEFAULT_VENUES;
@@ -216,7 +197,7 @@ export const FAQ_DATA = [
   },
   {
     question: 'Can I order passes for multiple events?',
-    answer: 'Yes! You can combine pass orders for multiple Navratri venues in Ahmedabad into a single corporate enquiry.'
+    answer: 'Yes! You can combine bulk pass orders across premier Mandli Garbas (Rudaah, Raataldi) and top AC Dome Garbas in Ahmedabad into a single corporate enquiry.'
   },
   {
     question: 'Do you deliver outside Ahmedabad?',

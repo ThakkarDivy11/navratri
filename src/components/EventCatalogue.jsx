@@ -67,7 +67,20 @@ export default function EventCatalogue({ onRequestPasses }) {
 
   const filteredVenues = venues.filter((venue) => {
     if (currentFilter === 'all') return true;
-    if (currentFilter === 'ahmedabad') return (venue.city || 'Ahmedabad').toLowerCase() === 'ahmedabad';
+    if (currentFilter === 'mandli') {
+      return (
+        venue.category === 'mandli' ||
+        (venue.name || '').toLowerCase().includes('mandli') ||
+        (venue.badge || '').toLowerCase().includes('mandli')
+      );
+    }
+    if (currentFilter === 'ac_dome') {
+      return (
+        venue.category === 'ac_dome' ||
+        (venue.name || '').toLowerCase().includes('dome') ||
+        (venue.badge || '').toLowerCase().includes('dome')
+      );
+    }
     if (currentFilter === 'vip') return (venue.passTypes || '').includes('VIP');
     return true;
   });
@@ -77,10 +90,10 @@ export default function EventCatalogue({ onRequestPasses }) {
       <div className="container">
         <div className="section-header">
           <div className="section-tag">
-            <FaCalendarDays /> Event Catalogue
+            <FaCalendarDays /> Mandli &amp; AC Dome Catalogue
           </div>
-          <h2>Available Navratri Events</h2>
-          <p>Choose an event and tell us how many passes you need.</p>
+          <h2>Available Mandli &amp; AC Dome Passes</h2>
+          <p>Source authentic Mandli Garba &amp; premium AC Dome passes in Ahmedabad at direct B2B rates.</p>
         </div>
 
         <div className="catalog-controls">
@@ -92,10 +105,16 @@ export default function EventCatalogue({ onRequestPasses }) {
               All Events
             </button>
             <button
-              className={`pill-btn${currentFilter === 'ahmedabad' ? ' active' : ''}`}
-              onClick={() => setCurrentFilter('ahmedabad')}
+              className={`pill-btn${currentFilter === 'mandli' ? ' active' : ''}`}
+              onClick={() => setCurrentFilter('mandli')}
             >
-              Ahmedabad Venues
+              Mandli Garba
+            </button>
+            <button
+              className={`pill-btn${currentFilter === 'ac_dome' ? ' active' : ''}`}
+              onClick={() => setCurrentFilter('ac_dome')}
+            >
+              AC Dome Garba
             </button>
             <button
               className={`pill-btn${currentFilter === 'vip' ? ' active' : ''}`}
@@ -111,8 +130,8 @@ export default function EventCatalogue({ onRequestPasses }) {
             <div className="event-card" key={venue.id}>
               <div className="event-image-container">
                 <Image
-                  src={venue.image || '/assets/venue_karnavati.jpg'}
-                  alt={`${venue.name} — Ahmedabad Navratri 2026 Venue`}
+                  src={venue.image || '/assets/ruda_garba.png'}
+                  alt={`${venue.name} — Ahmedabad Mandli Garba 2026 Venue`}
                   width={400}
                   height={225}
                   className="event-card-img"
@@ -121,7 +140,7 @@ export default function EventCatalogue({ onRequestPasses }) {
                   <FaCalendarDay /> {venue.dates}
                 </div>
                 <div className="event-verified-badge">
-                  <FaCircleCheck /> {venue.badge || 'Verified B2B'}
+                  <FaCircleCheck /> {venue.badge || 'Authentic Mandli Garba'}
                 </div>
               </div>
 

@@ -4,8 +4,8 @@ export default function FinalCTA({ onRequestPasses }) {
   return (
     <section className="container">
       <div className="final-cta-section">
-        <h2>Your Navratri Pass Requirement Starts Here.</h2>
-        <p>Choose your event, tell us your quantity and we'll take care of the rest.</p>
+        <h2>Your Mandli &amp; AC Dome Pass Requirement Starts Here.</h2>
+        <p>Choose your event, tell us your required quantity and we'll secure the best B2B wholesale rates.</p>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <button

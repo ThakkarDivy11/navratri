@@ -11,41 +11,39 @@ export const siteConfig = {
   name: 'RangSetu',
   legalName: 'RangSetu Navratri Services Ahmedabad',
   siteUrl: SITE_URL,
-  title: 'RANGSETU — Mandli Garba Passes Ahmedabad 2026 | Rudaah & Raataldi B2B Passes',
-  titleTemplate: '%s | RangSetu — Mandli Garba Passes Ahmedabad',
+  title: 'RANGSETU — Mandli & AC Dome Garba Passes Ahmedabad 2026 | B2B Bulk Passes',
+  titleTemplate: '%s | RangSetu — Mandli & AC Dome Garba Passes Ahmedabad',
   description:
-    'Ahmedabad’s premier Mandli Garba B2B pass portal. Source authentic bulk passes for Rudaah Mandli Garba, Raataldi Mandli Garba, Karnavati Club, Rajpath Club & Mirchi. Direct B2B rates, physical & digital passes, and instant WhatsApp support (+91 96649 25159).',
-  tagline: 'Direct B2B Mandli Garba Pass Procurement & Wholesale Rates in Ahmedabad',
+    'Ahmedabad’s premier Mandli & AC Dome Garba B2B pass portal. Source authentic bulk passes for Rudaah Mandli Garba, Raataldi Mandli Garba, Suvarn AC Dome & Shankus AC Dome Arena. Direct B2B rates, physical & digital passes, and instant WhatsApp support (+91 96649 25159).',
+  tagline: 'Direct B2B Mandli & AC Dome Garba Pass Procurement & Wholesale Rates in Ahmedabad',
   
   // Keyword Strategy
   keywords: [
-    // Primary Mandli Garba Keywords
+    // Mandli Garba Keywords
     'Mandli Garba passes Ahmedabad 2026',
     'Rudaah Mandli Garba passes',
     'Raataldi Mandli Garba passes',
     'Rudaah Garba Ahmedabad',
     'Raataldi Garba passes 2026',
-    'Mandli Garba passes price',
+    'Mandli Garba bulk passes Ahmedabad',
     'Ahmedabad Mandli Garba tickets',
     'B2B Mandli Garba passes',
-    // Venue & General Keywords
-    'Navratri passes Ahmedabad 2026',
-    'B2B Navratri passes',
-    'bulk Garba passes Ahmedabad',
-    'Navratri pass booking Ahmedabad',
-    'Karnavati Club Garba passes 2026',
-    'Rajpath Club Navratri passes',
-    'Mirchi Rock N Dhol passes Ahmedabad',
-    'Shankus Mega Garba Arena tickets',
-    // Audience & Commercial Intent Keywords
+    // AC Dome Garba Keywords
+    'AC Dome Garba passes Ahmedabad 2026',
+    'AC Dome Navratri passes Ahmedabad',
+    'Suvarn AC Dome Garba passes',
+    'Shankus AC Dome tickets',
+    'AC Dome Garba tickets price',
+    'luxury AC Dome Garba passes',
+    'bulk AC Dome Navratri passes',
+    // Commercial Intent Keywords
     'corporate Navratri passes Ahmedabad',
     'wholesale garba passes',
     'bulk Navratri tickets for companies',
-    'Navratri pass reseller Ahmedabad',
     'Ahmedabad garba pass supplier',
-    'physical garba wristbands Ahmedabad',
+    'physical Mandli Garba wristbands Ahmedabad',
     'online Navratri passes Gujarat',
-    'Ahmedabad Navratri 2026 tickets'
+    'Ahmedabad Navratri 2026 passes'
   ],
 
   // Contact and Location Information

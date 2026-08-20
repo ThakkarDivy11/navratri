@@ -7,7 +7,7 @@ import { FaWhatsapp, FaXmark, FaLock } from 'react-icons/fa6';
 export default function EnquiryModal({ isOpen, onClose, initialVenue, initialPass, initialFormat }) {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    venue: initialVenue || 'Karnavati Club Garba 2026',
+    venue: initialVenue || 'Rudaah Mandli Garba 2026',
     passType: initialPass || 'General',
     quantity: 20,
     format: initialFormat || 'Physical Pass',
@@ -24,7 +24,7 @@ export default function EnquiryModal({ isOpen, onClose, initialVenue, initialPas
       setSubmitted(false);
       setFormData((prev) => ({
         ...prev,
-        venue: initialVenue || 'Karnavati Club Garba 2026',
+        venue: initialVenue || 'Rudaah Mandli Garba 2026',
         passType: initialPass || 'General',
         format: initialFormat || 'Physical Pass',
       }));
@@ -89,9 +89,10 @@ ${formData.notes ? `📝 *Additional Req:* ${formData.notes}\n` : ''}-----------
                   {VENUES_DATA.map((v) => (
                     <option key={v.id} value={v.name}>{v.name}</option>
                   ))}
-                  <option value="Custom B2B Multiple Events">Custom B2B Multiple Events</option>
+                  <option value="Mandli Garba Bulk Order">Mandli Garba Bulk Order</option>
+                  <option value="AC Dome Garba Bulk Order">AC Dome Garba Bulk Order</option>
+                  <option value="Mandli + AC Dome Combo Bulk Order">Mandli + AC Dome Combo Bulk Order</option>
                   <option value="General Bulk Order">General Bulk Order</option>
-                  <option value="Custom B2B Bulk Order">Custom B2B Bulk Order</option>
                   <option value="Physical Pass Enquiry">Physical Pass Enquiry</option>
                   <option value="Online Pass Enquiry">Online Pass Enquiry</option>
                   <option value="100+ Bulk Quote">100+ Bulk Quote</option>
